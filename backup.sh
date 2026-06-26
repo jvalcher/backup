@@ -60,15 +60,25 @@ for dir in "${config_dirs[@]}"; do
     sync_dirs "$HOME_CONFIG_DIR/$dir" "$BACKUP_CONFIG_DIR/$dir"
 done
 
+#
+# GNOME
+#
 print_title "GNOME"
+
 mkdir -pv "$BACKUP_GNOME_DIR"
 dconf dump / > $BACKUP_GNOME_DIR/gnome-settings.dconf
 dconf dump /org/gnome/shell/extensions/ > $BACKUP_GNOME_DIR/extensions.dconf
 
+#
+# ~/Documents/dev
+#
 print_title "$HOME_DOCS_DEV_DIR"
 mkdir -pv "$BACKUP_DOCS_DEV_DIR"
 sync_dirs "$HOME_DOCS_DEV_DIR" "$BACKUP_DOCS_DEV_DIR"
 
+#
+# ~/Pictures/wallpapers
+#
 print_title "$HOME_PICS_WALLPAPERS_DIR"
 mkdir -pv "$BACKUP_PICS_WALLPAPERS_DIR"
 sync_dirs "$HOME_PICS_WALLPAPERS_DIR" "$BACKUP_PICS_WALLPAPERS_DIR"
