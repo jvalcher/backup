@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#
+# Print full gdb core dump back trace for binary
+# ---------
+# Run from directory containing core file ( `./core*` ):  
+#   $ core_bt a.out
+#
+
+gdb --quiet \
+    -ex "set pagination off" \
+    -ex "set print thread-events off" \
+    -ex "set print pretty on" \
+    -ex "set print array on" \
+    -ex "bt full" \
+    -ex "quit" \
+    "$1" ./core*
+

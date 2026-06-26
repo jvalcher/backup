@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+
+"""
+
+Tally counter
+
+- Space bar to increment
+- 'r' to reset
+- 'q' to quit
+- Returns final count
+
+"""
+
+import curses
+
+def main(stdscr):
+    curses.curs_set(0)  # Hide cursor
+    stdscr.nodelay(True)
+    stdscr.clear()
+    counter = 0
+
+    stdscr.addstr(0, 0, "----------")
+    stdscr.addstr(1, 0, "Tally Counter")
+    stdscr.addstr(2, 0, "----------")
+    stdscr.addstr(3, 0, "Increment:  space")
+    stdscr.addstr(4, 0, "Reset:        r")
+    stdscr.addstr(5, 0, "Quit:         q")
+    stdscr.addstr(6, 0, " ")
+    stdscr.addstr(7, 0, " ")
+
+    while True:
+        key = stdscr.getch()
+        if key == ord(' '):
+            counter += 1
+        elif key == ord('r'):
+            counter = 0
+        elif key == ord('q'):
+            break
+
+        stdscr.addstr(8, 0, f"Count:   {counter} ")
+        stdscr.refresh()
+
+    return counter
+
+if __name__ == "__main__":
+    count = curses.wrapper(main)
+    print(f"Final count: {count}")
+

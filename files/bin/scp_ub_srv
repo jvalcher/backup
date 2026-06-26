@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# scp into VirtualBox Ubuntu Server 24.04
+
+scp -P 3022 $@ jvalcher@127.0.0.1:~/
+

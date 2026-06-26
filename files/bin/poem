@@ -1,0 +1,13 @@
+#!/bin/bash
+
+IMG="/home/jvalcher/Pictures/wallpapers/forest_stream.png"
+CUR_DIR="$(pwd)"
+PDIR="$HOME/Documents/poems"
+HFILE="$PDIR/.history"
+LFILE=$(head -n 1 "$HFILE")
+
+cd $PDIR
+kitty @ set-background-image "$IMG"
+nvim '+TZMinimalist' "$LFILE"
+kitty @ set-background-image none
+cd $CUR_DIR

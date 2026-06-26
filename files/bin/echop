@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# print $PATHs, each on newline
+
+OLD_IFS=$IFS
+IFS=":"
+
+for path in $PATH; do
+  echo "$path"
+done
+
+IFS=$OLD_IFS

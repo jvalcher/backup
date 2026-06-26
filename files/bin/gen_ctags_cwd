@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Generate ctags file recursively in cwd
+#
+
+TFILE="tags"
+
+ctags -f tags \
+      --recurse=yes \
+      --sort=yes \
+      --kinds-all=* \
+      .

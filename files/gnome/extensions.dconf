@@ -1,0 +1,93 @@
+[bluetooth-quick-connect]
+debug-mode-on=true
+keep-menu-on-toggle=true
+refresh-button-on=true
+show-battery-value-on=true
+
+[dash-to-dock]
+dash-max-icon-size=48
+dock-fixed=true
+dock-position='BOTTOM'
+extend-height=false
+show-mounts=true
+show-mounts-network=false
+show-mounts-only-mounted=true
+
+[dash-to-panel]
+animate-appicon-hover=false
+animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
+appicon-margin=2
+appicon-padding=4
+appicon-style='NORMAL'
+dot-position='BOTTOM'
+extension-version=73
+global-border-radius=0
+highlight-appicon-hover=true
+hotkeys-overlay-combo='TEMPORARILY'
+panel-anchors='{"LEN-0x00000001":"MIDDLE"}'
+panel-element-positions='{}'
+panel-lengths='{}'
+panel-positions='{"LEN-0x00000001":"TOP"}'
+panel-sizes='{"LEN-0x00000001":32}'
+prefs-opened=false
+trans-use-border=true
+window-preview-title-position='TOP'
+
+[ding]
+check-x11wayland=true
+show-home=false
+
+[mediacontrols]
+extension-index=uint32 1
+extension-position='Left'
+label-width=uint32 200
+scroll-labels=false
+
+[notification-position]
+position='bottom-right'
+show-indicator=false
+
+[paperwm]
+last-used-display-server='Wayland'
+open-window-position=1
+restore-attach-modal-dialogs=''
+restore-edge-tiling=''
+restore-keybinds='{}'
+restore-workspaces-only-on-primary=''
+
+[paperwm/workspaces]
+list=['8a9cd8d5-1040-4f9b-a769-541413f84fca', '7f918e37-d42e-4b52-a622-f87f91d194b3']
+
+[paperwm/workspaces/7f918e37-d42e-4b52-a622-f87f91d194b3]
+index=1
+
+[paperwm/workspaces/8a9cd8d5-1040-4f9b-a769-541413f84fca]
+index=0
+
+[reminderalarmclock]
+drop-seconds=false
+message='Knock knock'
+show-test-notification=false
+
+[simple_timer]
+last-timer-input='20:00'
+
+[tiling-assistant]
+active-window-hint-color='rgb(211,70,21)'
+last-version-installed=46
+restore-window=['<Super>Down']
+tile-left-half=['<Super>Left', '<Super>KP_4']
+tile-maximize=['<Super>Up', '<Super>KP_5']
+tile-right-half=['<Super>Right', '<Super>KP_6']
+tiling-popup-all-workspace=true
+
+[tilingshell]
+last-version-name-installed='17.1'
+layouts-json='[{"id":"Layout 1","tiles":[{"x":0,"y":0,"width":0.22,"height":0.5,"groups":[1,2]},{"x":0,"y":0.5,"width":0.22,"height":0.5,"groups":[1,2]},{"x":0.22,"y":0,"width":0.56,"height":1,"groups":[2,3]},{"x":0.78,"y":0,"width":0.22,"height":0.5,"groups":[3,4]},{"x":0.78,"y":0.5,"width":0.22,"height":0.5,"groups":[3,4]}]},{"id":"Layout 2","tiles":[{"x":0,"y":0,"width":0.22,"height":1,"groups":[1]},{"x":0.22,"y":0,"width":0.56,"height":1,"groups":[1,2]},{"x":0.78,"y":0,"width":0.22,"height":1,"groups":[2]}]},{"id":"Layout 3","tiles":[{"x":0,"y":0,"width":0.33,"height":1,"groups":[1]},{"x":0.33,"y":0,"width":0.67,"height":1,"groups":[1]}]},{"id":"Layout 4","tiles":[{"x":0,"y":0,"width":0.67,"height":1,"groups":[1]},{"x":0.67,"y":0,"width":0.33,"height":1,"groups":[1]}]}]'
+overridden-settings='{}'
+selected-layouts=[['Layout 1'], ['Layout 1']]
+window-use-custom-border-color=true
+
+[window-title-is-back]
+colored-icon=false
+show-title=false

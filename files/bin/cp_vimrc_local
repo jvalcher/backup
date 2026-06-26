@@ -1,0 +1,83 @@
+#!/bin/bash
+
+#
+# This script creates a local .vimrc file that enables the use of global and
+# project-specific ctags files for a simple and reliable, albeit stripped-down, 
+# alternative to an LSP.
+#
+# The example is for a C/C++ project. Adjust the flags for other languages. Read
+# the ctags man page for more information.
+#
+#   $ ctags --list-languages
+#
+#########
+# USAGE:
+#########
+#
+# - Install universal ctags.
+#
+# - Create global ctags files.
+#
+#   - In this example, we'll create $HOME/.tags_inc for all /usr/include C/C++ 
+#     header files. 
+#
+#       $ ctags -f $HOME/.tags_inc \
+#             --recurse=yes \
+#             --languages=C,C++ \
+#             --kinds-all=* \
+#             --exclude=*.c \
+#             --exclude=*.cpp \
+#             /usr/include
+#
+#   - Note that the --exclude flags won't be necessary in this case but will be useful 
+#     for libraries that include the source files. You can also create a global flags
+#     file to exclude common directories and file types.
+#
+#       - $HOME/.config/ctags/flags.ctags
+#
+#           --exclude=.git
+#           --exclude=build
+#           --exclude=cmake
+#           --exclude=obj
+#           --\*.bak
+#
+# - Set the following in $HOME/.vimrc to enable local .vimrc files in your project's
+#   root directory.
+#
+#     set exrc       " Use .vimrc in project root
+#     set secure     " Disable dangerous commands in local .vimrc
+#
+# - Run this script in your project's root directory to create a local .vimrc file.
+#
+# - Adjust the tags paths and ctags flags as needed for your project.
+#
+# - Open a project file with vim from the root directory and run :GenCtags to create 
+#   a local ctags file. Rerun :GenCtags as needed to reflect any code changes.
+#
+# - Vim commands:
+#
+#       ctrl ]          - open a buffer with the first definition match
+#       g]              - open a list of definition matches
+#       ctrl-shift-n    - open a dropdown list of autocomplete suggestions while
+#                         in insert mode
+#
+# - Check out plugins such as vim-buftabline and NERDTree for easier buffer management
+#   and navigation.
+#
+
+cat > ./.vimrc <<- EOM
+
+filetype plugin on
+set tags=./.tags,\$HOME/.tags_inc
+
+command! GenCtags 
+    \ silent execute 
+    \ '!ctags -f .tags 
+    \ --recurse=yes 
+    \ --languages=C,C++ 
+    \ --kinds-all=* 
+    \ --exclude=*.c 
+    \ --exclude=*.cpp .' 
+    \ | redraw!
+
+EOM

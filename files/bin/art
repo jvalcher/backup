@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Run ascii art program
+
+# check usage
+usage() {
+    echo "Usage: art [-m] [-a]"
+    echo "  -m    cmatrix"
+    echo "  -a    asciiquarium"
+    exit 1
+}
+if [ $# -eq 0 ]; then
+    usage
+fi
+
+# parse opt
+while getopts "lma" opt; do
+    case $opt in
+        m)
+            cmatrix
+            ;;
+        a)
+            asciiquarium
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done

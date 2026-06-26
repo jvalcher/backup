@@ -1,0 +1,35 @@
+#!/bin/bash
+
+ARCH="$(flatpak info --show-metadata org.videolan.VLC \
+      | sed -En '
+          /^\[Application\]/ {
+              :label
+              /^runtime=/ {
+                  # Leave just the arch
+                  s|[^/]*/||
+                  s|/[^/]*||
+                  p
+                  q
+              }
+              n
+              /^[^\[]/b label
+              q
+          }'
+)"
+BRANCH="$(flatpak info --show-metadata org.videolan.VLC \
+      | sed -En '
+          /^\[Extension org.videolan.VLC.Plugin\]/ {
+              :label
+              /^versions=/ {
+                  # Use the second version in the list. This assumes a specific
+                  # "versions=" format and might break if it changes.
+                  s/[^;]*;//
+                  p
+                  q
+              }
+              n
+              /^[^\[]/b label
+              q
+          }'
+)"
+flatpak install "runtime/org.videolan.VLC.Plugin.pause_click/$ARCH/$BRANCH"

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#
+# Generate global C/C++ library ctags
+#
+TAGS_FILE="$HOME/.tags_linux"
+
+ctags -f $TAGS_FILE \
+    --recurse=yes \
+    --exclude='*.toml' \
+    --quiet=yes \
+    --languages=C,C++ \
+    /usr/include \
+    /usr/local/include
+
+echo "Generated ctags file \"$TAGS_FILE\""
+

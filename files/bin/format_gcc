@@ -1,0 +1,9 @@
+#!/usr/bin/python3
+
+import sys
+sys.path.insert(1, "/home/jvalcher/Git/gcc_error_formatting")
+
+from format_gcc_output import format_gcc_output
+
+format_gcc_output (sys.argv[1])
+

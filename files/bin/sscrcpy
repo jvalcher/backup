@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# Launch scrcpy with daemon to allow swipe-scrolling with j,k in Kindle app
+#
+
+SCROLL_MS=120  # Total swipe time in ms
+SCROLL_PIX=100  # Length of swipe in pixels
+KBD_DEV="$(ls /dev/input/by-id/*-event-kbd)"  # keyboard device
+UP_KEY="KEY_K"
+DOWN_KEY="KEY_J"
+
+scrcpy_focused() {
+    win_id=$(xdotool getactivewindow 2>/dev/null) || return 1
+    xprop -id "$win_id" WM_CLASS 2>/dev/null | grep -q 'scrcpy'
+}
+
+scroll_daemon() {
+    local WIDTH=$(adb shell wm size | grep -oP '\d+(?=x)' )
+    local HEIGHT=$(adb shell wm size | grep -oP '(?<=x)\d+' )
+    local X=$((WIDTH / 2))
+    local Y=$((HEIGHT / 2))
+
+    pkill -f "$0" -o 2>/dev/null
+    exec 3< <(evtest "$KBD_DEV")
+
+    while read -r line <&3; do
+        if [[ "$line" =~ "$UP_KEY" ]] && [[ "$line" =~ "value 1" ]]; then
+            if scrcpy_focused; then
+                adb shell input swipe $X $Y $X $((Y + SCROLL_PIX)) $SCROLL_MS
+            fi
+        fi
+        if [[ "$line" =~ "$DOWN_KEY" ]] && [[ "$line" =~ "value 1" ]]; then
+            if scrcpy_focused; then
+                adb shell input swipe $X $Y $X $((Y - SCROLL_PIX)) $SCROLL_MS
+            fi
+        fi
+    done
+}
+
+if [[ -n "$SCROLL_DAEMON_MODE" ]]; then
+    scroll_daemon
+    exit 0
+fi
+SCROLL_DAEMON_MODE=1 "$0" &
+DAEMON_PID=$!
+
+scrcpy
+
+kill "$DAEMON_PID" 2>/dev/null
+wait "$DAEMON_PID" 2>/dev/null
+exit 0

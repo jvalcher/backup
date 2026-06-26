@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cd /home/jvalcher/Repos/timebomb/Linux/python && env GDK_BACKEND=x11 /home/jvalcher/Repos/timebomb/Linux/python/venv/bin/python3 timebomb.py

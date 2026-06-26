@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo systemctl restart systemd-networkd
+sudo easytether-usb
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# core dump directory
+core_dir="/var/lib/apport/coredump"
+
+# get most recent core dump name
+most_recent_core=$(ls -t "$core_dir" | head -n 1)
+
+if [ -n "$most_recent_core" ]; then
+    cp -f "$core_dir/$most_recent_core" ./core
+    echo "Core copied"
+else
+    echo "No core dumps found in $core_dir"
+fi

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#
+# Check all git directories in pwd for unstaged changes
+#
+
+GREEN="\033[1;32m"
+MAGENTA="\033[35m"
+RESET="\033[0m"
+
+set -euo pipefail
+
+for dir in */; do
+    [ -d "$dir" ] || continue
+
+    if git -C "$dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+
+        if ! git -C "$dir" diff --quiet || ! git -C "$dir" diff --cached --quiet; then
+            printf "${MAGENTA}MODIFIED${RESET}:    ${dir%/}\n"
+        else
+            printf "${GREEN}CLEAN${RESET}:       ${dir%/}\n"
+        fi
+    fi
+done
+

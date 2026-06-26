@@ -1,0 +1,187 @@
+#!/bin/bash
+#
+# Countdown timer without sound and notification
+# ----------
+# Usage:
+#   t  <time> <name>
+#   t  2:15:5  
+#   t  1::  "Study"
+#   t  15:  "Break"
+#   t  30   "Sprint"
+#
+# Dependencies:
+#   cvlc
+#   notify-send
+#   tput
+#
+SOUND="$HOME/Music/singing_bowl.wav"
+
+
+############
+
+MESSAGE=""
+INTERVAL=$1
+TIMER_NAME="$2"
+PAUSED=false
+
+# Prepend '0' if number is less than 10
+prepend_zero() {
+    NUM=$1
+
+    if [ $NUM -lt 10 ]
+    then
+        echo "0$NUM"
+    else
+        echo "$NUM"
+    fi
+}
+
+cleanup() {
+    tput cnorm
+}
+
+print_message() {
+    if [ -z $TIMER_NAME ]; then
+        MESSAGE="Timer ended"
+    else
+        MESSAGE="Timer \"$TIMER_NAME\" ended"
+    fi
+    printf "$MESSAGE\n\n"
+}
+
+pause_resume() {
+    if [ "$PAUSED" = true ]; then
+        PAUSED="false"
+    else
+        PAUSED="true"
+    fi
+}
+
+print_time() {
+    clear
+
+    # title
+    printf "\n Timer"
+    if [ $TIMER_NAME ]; then
+        printf ": \"$TIMER_NAME\""
+    fi
+    printf "\n\n"
+
+    # options
+    if [[ "$PAUSED" = "false" ]]; then
+        printf " 'p' to pause\n"
+    else
+        printf " 'p' to resume\n"
+    fi
+    printf " 'q' to quit\n\n"
+
+    # time
+    HOUR=$(( SECS/3600 ))
+    HOUR=$(prepend_zero $HOUR)
+    MIN=$(( (SECS/60)%60 ))
+    MIN=$(prepend_zero $MIN)
+    SEC=$(( SECS%60 ))
+    SEC=$(prepend_zero $SEC)
+    printf " $HOUR:$MIN:$SEC \n\n"
+
+    if [[ "$PAUSED" = "true" ]]; then
+        printf " *PAUSED*\n"
+    fi
+}
+
+parse_time() {
+    local time_str=$1
+
+    if [[ "$time_str" == *:*:* ]]; then
+        IFS=:
+        read -ra time_array <<< "$time_str"
+        HOUR=${time_array[0]}
+        MIN=${time_array[1]}
+        SEC=${time_array[2]}
+    elif [[ "$time_str" == *:* ]]; then
+        IFS=:
+        read -ra time_array <<< "$time_str"
+        HOUR=0
+        MIN=${time_array[0]}
+        SEC=${time_array[1]}
+    else
+        HOUR=0
+        MIN=0
+        SEC=$time_str
+    fi
+}
+
+timer() {
+    parse_time "$1"
+    SECS=$(( HOUR * 3600 + MIN * 60 + SEC ))
+
+    while [ $SECS -gt 0 ]
+    do
+
+        # paused
+        while [ "$PAUSED" = "true" ]
+        do
+            read -s -t 1 -N 1 INPUT
+
+            if [[ $INPUT = "p" ]]; then
+                pause_resume
+            fi
+
+            if [[ $INPUT = "q" ]]; then
+                exit 0
+            fi
+
+            function trap_ctrlc () {
+                quit
+                exit 0
+            }
+            trap "trap_ctrlc" 2
+
+            print_time
+
+            sleep 1
+        done
+
+        print_time
+
+        # 1-second timeout to store single-character
+        read -s -t 1 -N 1 INPUT
+
+        if [[ $INPUT = "p" ]]; then
+            pause_resume
+        fi
+
+        if [[ $INPUT = "q" ]]; then
+            cleanup
+            exit 0
+        fi
+
+        function trap_ctrlc () {
+            cleanup
+            exit 0
+        }
+        trap "trap_ctrlc" 2
+
+        SECS=$(( SECS -1 ))
+    done
+
+    cleanup
+    print_message
+}
+
+
+# Check if argument supplied
+if [ $# -eq 0 ]; then
+    printf "Usage:\n"
+           "\tt 1:30:5\n"
+           "\tt ::30 \"Sprint\""
+    exit 1;
+fi
+
+tput civis
+timer $INTERVAL
+cvlc $SOUND > /dev/null 2>&1 &
+notify-send --urgency=critical "$MESSAGE"
+
+exit 0
+

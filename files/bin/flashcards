@@ -1,0 +1,11 @@
+#!/bin/sh
+
+FC_DIR="$HOME/Code/flashcards"
+
+cd "$FC_DIR"
+tmux split-window -h
+tmux send-keys -t 1 "./run" C-m
+tmux split-window -v -t 1
+tmux send-keys -t 2 "cd $FC_DIR/sets/image" C-m
+tmux select-pane -t 0
+nvim $FC_DIR/sets/

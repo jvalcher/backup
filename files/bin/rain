@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Play rain audio
+
+AUDIO_FILE="$HOME/Music/gentle_rain.m4a"
+
+audacious "$AUDIO_FILE"

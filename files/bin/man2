@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Print all man 2 functions with containing man page's brief description
+#
+
+MAN="2"
+DOC="$HOME/Documents/dev/functions_man${MAN}.txt"
+
+man -k . \
+  | grep "(${MAN})" \
+  | awk -F ' - ' '{ print $2 "::: " $0 }' \
+  | sort \
+  | sed 's/^[^:]*:::[ ]*//' \
+  > "$DOC"
+
+nvim "$DOC"
+rm "$DOC"

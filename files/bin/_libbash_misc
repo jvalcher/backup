@@ -1,0 +1,141 @@
+for_each_arg() {
+    local callback="${1:?missing callback argument}"
+
+    while [[ $# -gt 0 ]]; do
+        "$callback" $1
+        shift
+    done
+}
+
+
+
+#
+# Iterate through array elements
+#
+#    dirs=(src inc test)
+#    print_str() {
+#        echo "This is the $1 dir"
+#    }
+#    for_each_elem_in_arr dirs print_str
+#
+for_each_elem_in_arr() {
+    local arr_name="${1:?missing array and callback arguments}"
+    local callback="${2:?missing callback argument}"
+    local -n arr=$arr_name
+
+    for elem in "${arr[@]}"; do
+        "$callback" "$elem"
+    done
+}
+
+
+
+#
+# Iterate through string elements separated by delimiter
+#
+#     STR="Hello,there,good,lookin"
+#     for_each_elem_in_str "$STR" ',' echo
+#
+for_each_elem_in_str() {
+    local string="${1:?missing string, delimiter, callback arguments}"
+    local delim="${2:?missing delimiter, callback arguments}"
+    local callback="${3:?missing callback argument}"
+
+    IFS="$delim" read -ra str_arr <<< "$string"
+    for elem in "${str_arr[@]}"; do
+        "$callback" "$elem"
+    done
+}
+
+
+
+# 
+# Check if directory empty
+#
+#     if dir_empty my_dir; then
+#         echo "it's empty!"
+#     else
+#         echo "it's not empty!"
+#     fi
+#
+dir_empty() {
+    local dir="${1:?missing directory argument}"
+
+    if [[ ! -e "$dir" ]] || [[ -z "$(ls -A "$dir")" ]]; then
+        true
+    else
+        false
+    fi
+}
+
+
+
+#
+# Check if file exists
+#
+#     if file_exists my_file; then
+#         echo "file exists"
+#     else
+#         echo "file doesn't exist"
+#     fi
+#
+file_exists() {
+    local file="${1:?missing file argument}"
+
+    if [[ -f "$file" ]]; then
+        true
+    else
+        false
+    fi
+}
+
+
+
+#
+# Make sure directory exists
+#
+#     ensure_dir_exists my_dir
+#     sudo ensure_dir_exists root_dir root
+#
+ensure_dir_exists() {
+    local dir="${1:?directory is missing}"
+    local owner="${2:-}"
+
+    mkdir -p "${dir}"
+    if [[ -n $owner ]]; then
+        chown "$owner":"$owner" "$dir"
+    fi
+}
+
+
+#
+# Get total memory available
+# - Case-insensitive
+# - All answers in binary values (i.e. kb outputs kib)
+#
+#     get_total_mem b|kb|kib|mb|mib|gb|gib  
+#
+print_mem() {
+    local unit="${1:-kb}"
+
+    local total_kb=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+    local total_b="$(( total_kb * 1024 ))"
+    local total_mb="$(( total_kb / 1024 ))"
+    local total_gb="$(( total_kb / 1024 / 1024 ))"
+
+    local free_kb=$(awk '/MemFree/ {print $2}' /proc/meminfo)
+    local free_b="$(( free_kb * 1024 ))"
+    local free_mb="$(( free_kb / 1024 ))"
+    local free_gb="$(( free_kb / 1024 / 1024 ))"
+
+    shopt -s nocasematch
+
+    case "$unit" in
+        k|kb|kib) echo "Total: $total_kb kB, free: $free_kb kB" ;;
+        b)      echo "Total: $total_b B, free: $free_b B" ;;
+        m|mb|mib) echo "Total: $total_mb mB, free: $free_mb mB" ;;
+        g|gb|gib) echo "Total: $total_gb gB, free: $free_gb gB" ;;
+    esac
+
+    shopt -u nocasematch
+}

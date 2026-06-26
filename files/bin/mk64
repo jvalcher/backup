@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#
+# Start Mario Kart 64 in mupen64plus
+#
+# Config file
+#   $HOME/.config/mupen64plus/mupen64plus.cfg
+#
+# Plugin directory
+#     /usr/lib/x86_64-linux-gnu/mupen64plus
+#
+
+mupen64plus \
+    --configdir $HOME/.config/mupen64plus \
+    --resolution 1920x1080 \
+    --set Core[SaveSRAMPath]=$HOME/.local/share/mupen64plus/save \
+    --fullscreen \
+    $HOME/Games/n64/roms/mk64.n64

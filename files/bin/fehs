@@ -1,0 +1,21 @@
+#!/bin/bash
+if [ -z $2 ]; then
+	FILE="$@"; DIRECTORY="$(dirname "$FILE")";
+	FILES=($(find "$DIRECTORY" -maxdepth 1 -type f | sort));
+	i=0; # calculate offset
+	for FILE2 in "${FILES[@]}"; do
+		if [[ "$FILE" == "$FILE2" ]]; then o=$i; break; fi
+		i=$((i+1));
+	done
+	
+	n=${#FILES[@]}; m=$((n-1)); j=$o;
+	
+	for i in $(seq 1 $n); do
+		FILES2[$i]="${FILES[$j]}";
+		if [ $j -lt $m ]; then j=$((i+o)); else j=0; o=$((-1*i)); fi
+	done
+	
+	feh ${FILES2[@]};
+else
+	feh "$@";
+fi

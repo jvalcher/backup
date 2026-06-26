@@ -1,0 +1,21 @@
+#!/bin/bash
+
+check_internet_connection() {
+  if curl -s --head https://www.google.com | grep "200 OK" >/dev/null; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+while true; do
+  if check_internet_connection; then
+    echo "Connected to the internet."
+    sleep 5
+  else
+    echo "Not connected to the internet. Running 'easy'..."
+    sudo systemctl restart systemd-networkd
+    sudo easytether-usb
+    sleep 5
+  fi
+done

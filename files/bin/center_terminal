@@ -1,0 +1,30 @@
+#!/bin/bash
+
+TERMINAL_CLASS="gnome-terminal"
+TERM_MARGIN=350
+SLEEP_AMT=0.2
+
+# Get usable screen size (excluding panels)
+read SCREEN_WIDTH SCREEN_HEIGHT <<< $(xwininfo -root | awk '
+  /Width:/ { w = $2 }
+  /Height:/ { h = $2 }
+  END { print w, h }
+')
+
+# Calculate centered width and position of window terminal
+WIN_WIDTH=$((SCREEN_WIDTH - 2 * TERM_MARGIN))
+WIN_X=$TERM_MARGIN
+WIN_Y=0  # start from top
+WIN_HEIGHT=$SCREEN_HEIGHT
+
+# Find GNOME Terminal window
+WIN_ID=$(wmctrl -lx | grep "$TERMINAL_CLASS" | awk '{print $1}' | head -n1)
+
+# Remove maximized state
+wmctrl -ir "$WIN_ID" -b remove,maximized_vert,maximized_horz
+
+# Resize and reposition
+sleep $SLEEP_AMT
+wmctrl -ir "$WIN_ID" -e 0,$WIN_X,$WIN_Y,$WIN_WIDTH,$WIN_HEIGHT
+sleep $SLEEP_AMT
+wmctrl -ir "$WIN_ID" -b add,maximized_vert

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# SSH into VirtualBox Ubuntu Server 24.04
+
+ssh -p 3022 jvalcher@127.0.0.1
+

@@ -1,0 +1,66 @@
+#!/bin/bash
+
+source $TMUX_UTILS
+
+DOC_DIR="$HOME/Code/life"
+LIB_DIR="$HOME/Code/library"
+LEET_DIR="$HOME/Code/leet"
+PROTO_DIR="$HOME/Code/prototypes"
+
+
+
+SES="main"
+create_session "$SES"
+
+
+
+HOMEW="home"
+create_window "$HOMEW" "$HOME"
+send_command "$HOMEW" 0 'clear && ll'
+
+CONFW="config"
+create_window "$CONFW" "$HOME"
+send_command "$CONFW" 0 "ll"
+
+JOURNW="journal"
+create_window "$JOURNW" "$DOC_DIR"
+send_command "$JOURNW" 0 "nv '+TZAtaraxis' journal/2025.md"
+
+TOWOW="todo"
+create_split_window "$TOWOW" "$HOME" "$HOME"
+split_pane_v "$TOWOW" 0 40
+send_command "$TOWOW" 0 "nv $DOC_DIR/todo.md"
+send_command "$TOWOW" 1 "nv $HOME/Documents/dev/neovim.md"
+split_pane_v "$TOWOW" 2 40
+send_command "$TOWOW" 2 "nv $DOC_DIR/life_loop.txt"
+send_command "$TOWOW" 3 "nv $DOC_DIR/projects.md"
+
+#LEETW="leet"
+#create_split_window "$LEETW" "$LEET_DIR" "$LEET_DIR"
+#send_command "$LEETW" 0 "ll"
+#send_command "$LEETW" 1 "ll"
+
+LIBGITW="lib git"
+create_window "$LIBGITW" "$LIB_DIR"
+send_command "$LIBGITW" 0 "lazygit"
+
+LIBW="lib"
+create_window "$LIBW" "$LIB_DIR"
+send_command "$LIBW" 0 "ll"
+
+LIBDBGW="lib debug"
+create_window "$LIBDBGW" "$LIB_DIR"
+send_command "$LIBDBGW" 0 "ll"
+send_command_no_enter "$LIBDBGW" 0 "./debug_init"
+
+PROTOW="proto"
+create_window "$PROTOW" "$PROTO_DIR"
+send_command "$PROTOW" 0 "ll"
+
+SCRCPYW="scrcpy"
+create_window "$SCRCPYW" "$HOME"
+send_command_no_enter "$SCRCPYW" 0 "sscrcpy"
+
+
+
+attach_to_session "$SES"

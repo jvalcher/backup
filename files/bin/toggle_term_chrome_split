@@ -1,0 +1,70 @@
+#!/bin/bash
+
+# Toggle terminal, Chrome windows between maximized and vertically split
+
+PROG_TITLE="Terminal, Chrome split toggle"
+TERM_CLASS="gnome-terminal"
+CHROME_CLASS="chrome"
+SLEEP_SECS=0.2
+TERM_ADJ=24
+
+# Get window IDs
+TERM_ID=$(wmctrl -lx | grep "$TERM_CLASS" | awk '{print $1}' | head -n1)
+CHROME_ID=$(wmctrl -lx | grep "$CHROME_CLASS" | awk '{print $1}' | head -n1)
+
+echo $CHROME_ID
+
+# Check if both are open, notify and exit if not
+if [[ -z "$TERM_ID" || -z "$CHROME_ID" ]]; then
+    if [[ -z "$TERM_ID" && -z "$CHROME_ID" ]]; then
+        notify-send "$PROG_TITLE" "GNOME Terminal and Chrome are not open."
+    elif [[ -z "$TERM_ID" ]]; then
+        notify-send "$PROG_TITLE" "GNOME Terminal is not open."
+    else
+        notify-send "$PROG_TITLE" "Chrome is not open."
+    fi
+    exit 1
+fi
+
+# Get screen dimensions
+SCREEN_WIDTH=$(xwininfo -root | awk '/Width:/ {print $2}')
+SCREEN_HEIGHT=$(xwininfo -root | awk '/Height:/ {print $2}')
+HALF_WIDTH=$((SCREEN_WIDTH / 2))
+
+# Function to check if window is maximized horizontally
+is_maximized_horiz() {
+    xprop -id "$1" _NET_WM_STATE | grep -q '_NET_WM_STATE_MAXIMIZED_HORZ'
+}
+
+if is_maximized_horiz "$CHROME_ID"; then
+
+    # Split Chrome right
+    wmctrl -ir "$CHROME_ID" -b remove,maximized_vert,maximized_horz
+    wmctrl -ir "$CHROME_ID" -e 0,$((HALF_WIDTH+26)),0,$((HALF_WIDTH-26)),$SCREEN_HEIGHT
+    wmctrl -ir "$CHROME_ID" -b add,maximized_vert
+
+    sleep $SLEEP_SECS
+
+    # Split terminal left
+    wmctrl -ir "$TERM_ID" -b remove,maximized_vert,maximized_horz
+    wmctrl -ir "$TERM_ID" -e 0,0,0,$((HALF_WIDTH+26)),$SCREEN_HEIGHT
+    wmctrl -ir "$TERM_ID" -b add,maximized_vert
+
+    sleep $SLEEP_SECS
+
+    # Focus terminal
+    xdotool windowactivate "$TERM_ID"
+
+else
+
+    # Maximize both
+    wmctrl -ir "$CHROME_ID" -b add,maximized_vert,maximized_horz
+    sleep $SLEEP_SECS
+    wmctrl -ir "$TERM_ID" -b add,maximized_vert,maximized_horz
+
+    sleep $SLEEP_SECS
+
+    # Focus terminal
+    xdotool windowactivate "$TERM_ID"
+
+fi

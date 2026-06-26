@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# kill process by port number
+
+fuser -k $1/tcp
+

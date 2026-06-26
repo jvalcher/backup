@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Remove all local merged branches, to-be-pruned remotes  (print with git_ls_merged)
+#
+
+echo ""
+echo "Local merged branches removed"
+printf "___________\n"
+git branch --merged | grep -Ev "(^\*|origin|master|main|dev)" > /dev/null 2>&1
+status=$(echo $?)
+
+echo ""
+if [ $status -eq 0 ]; then
+    git branch --merged | grep -Ev "(^\*|origin|master|main|dev)" | xargs git branch -d | sed 's/Deleted branch //'
+fi
+
+printf "\n\n"
+echo "Local origin remotes pruned"
+printf "___________\n"
+git remote prune origin | grep -v "Pruning origin" | grep -v "URL: " | sed 's/ \* \[pruned\] //'
+printf "\n\n"

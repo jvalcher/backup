@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# print git diffs one file at a time
+
+git diff HEAD FETCH_HEAD --name-only | while read file_changes
+do
+    git diff HEAD FETCH_HEAD -- "$file_changes"
+    read
+done

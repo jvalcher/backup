@@ -1,0 +1,103 @@
+#!/bin/bash
+
+#
+# Bash library for creating tmux workspaces
+# -----------------------
+# - Set the $TMUX_UTILS environmental variable to point to this file in 
+#   your `.bashrc` file.
+#
+#       $ export TMUX_UTILS="$HOME/.local/bin/tmux_utils"
+#
+# - Make ~/.tmux.conf automatically load startup script
+#
+#       set-hook -g session-created 'send-keys "~/.local/bin/startup" Enter'
+#
+# - Example startup script:
+#
+#       #!/bin/bash
+#       
+#       source $TMUX_UTILS
+#       
+#       SES="main"
+#       create_session "$SES"
+#       
+#       HOMEW="home"
+#       create_split_window "$HOMEW" "$HOME" "$HOME"
+#       split_pane_v "$HOMEW" 1 30
+#       send_command "$HOMEW" 0 'ls'
+#       send_command "$HOMEW" 1 'ls'
+#       send_command_no_enter "$HOMEW" 2 'rain_audio'
+#       
+#       PROJW="proj1"
+#       create_window "$PROJW" "$HOME/Code/proj1"
+#       send_command "$PROJW" 0 'nvim src/main.c'
+#       
+#       attach_to_session "$SES"
+# 
+
+SESSION_NAME=""
+SESSION_WIN_CREATED=0
+
+
+# Create session named $1
+create_session() {
+    SESSION_NAME="$1"
+    if [ -n "$TMUX" ]; then
+        current_session=$(tmux display-message -p '#S')
+        if [ "$current_session" = "$SESSION_NAME" ]; then
+            echo "Already in session \"$SESSION_NAME\""
+            exit 1
+        fi
+    fi
+    tmux new-session -d -s "$SESSION_NAME"
+}
+
+# Create window named $1 in dir $2
+create_window() {
+    if [ "$SESSION_WIN_CREATED" -eq 0 ]; then
+        tmux rename-window -t "$SESSION_NAME" "$1"
+        tmux send-keys -t "$SESSION_NAME":"$1" "cd $2" C-m
+        SESSION_WIN_CREATED=1
+    else
+        tmux new-window -t "$SESSION_NAME" -n "$1" -c "$2" 
+    fi
+}
+
+# Create horizontally-split window named $1 in dir $2 and dir $3
+create_split_window() {
+    if [ "$SESSION_WIN_CREATED" -eq 0 ]; then
+        tmux rename-window -t "$SESSION_NAME" "$1"
+        tmux send-keys -t "$SESSION_NAME" "cd $2" C-m
+        tmux split-window -h -t "$SESSION_NAME" -c "$3"
+        SESSION_WIN_CREATED=1
+    else
+        local win_id=$(tmux new-window -t "$SESSION_NAME" -n "$1" -c "$2" -P -F "#{window_index}")
+        tmux split-window -h -t "$SESSION_NAME":"$win_id" -c "$3"
+    fi
+}
+
+# Split pane $2 in window $1 into a second pane that takes up $3% of pane $2
+split_pane_v() {
+    tmux split-window -v -t "$SESSION_NAME":"$1"."$2" -l "$3%"
+}
+split_pane_h() {
+    tmux split-window -h -t "$SESSION_NAME":"$1"."$2" -l "$3%"
+}
+
+# Send command $3 to window $1, pane $2
+send_command() {
+    tmux send-keys -t "$SESSION_NAME":"$1"."$2" "$3" Enter
+}
+send_command_no_enter() {
+    tmux send-keys -t "$SESSION_NAME":"$1"."$2" "$3"
+}
+
+# Attach to session $1
+attach_to_session() {
+    if [ -n "$TMUX" ]; then
+        tmux switch-client -t "$1"
+    else
+        tmux attach-session -t "$1"
+    fi
+}
+

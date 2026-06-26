@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# Do mupen64plus Mario Kart 64 time trial practice run
+# ---------
+# Loads different game state folders, each holding two ghost saves for two tracks
+# 
+
+ROM="$HOME/Games/n64/roms/mk64.n64"
+TTDIR="$HOME/.local/share/mupen64plus/mk64_time_trials"
+
+dirs=(
+    "$TTDIR/1a_lrw_mmf"
+    "$TTDIR/1b_ktb_kld"
+    "$TTDIR/2a_ttp_fps"
+    "$TTDIR/2b_chm_mrw"
+    "$TTDIR/3a_wst_sbl"
+    "$TTDIR/3b_rrw_bwc"
+    "$TTDIR/4a_djp_ysv"
+    "$TTDIR/4b_bbw_rbr"
+)
+for DIR in "${dirs[@]}"; do
+    mkdir -p "$DIR"
+done
+
+G="\033[1;32m"  # green
+Y="\033[1;33m"  # yellow
+P="\033[1;35m"  # purple
+C="\033[0;36m"  # cyan
+B="\033[0;34m"  # blue
+R="\033[0;31m"  # red
+X="\033[0m"     # reset
+
+names=(
+    "${G}Luigi Raceway        Moo Moo Farm     ${X}(${B}Mushroom Cup${X})"
+    "${G}Koopa Troopa Beach   Kalimari Desert  ${X}(${B}Mushroom Cup${X})"
+    "${G}Toad's Turnpike      Frappe Snowland  ${X}(${C}Flower Cup${X})"
+    "${G}Choco Mountain       Mario Raceway    ${X}(${C}Flower Cup${X})"
+    "${G}Wario Stadium        Sherbet Land     ${X}(${P}Star Cup${X})${X}"
+    "${G}Royal Raceway        Bowser's Castle  ${X}(${P}Star Cup${X})"
+    "${G}DK's Jungle Parkway  Yoshi Valley     ${X}(${Y}Special Cup${X})"
+    "${G}Banshee Boardwalk    Rainbow Road     ${X}(${Y}Special Cup${X})"
+)
+
+echo
+echo "--------------"
+echo "Mario Kart 64 Time Trials:"
+echo "--------------"
+
+while true; do
+    clear
+    echo -e "\nTime Trial Runs:\n"
+
+    for i in "${!names[@]}"; do
+        idx=$((i+1))
+        echo -e "$idx) ${names[$i]}"
+    done
+
+    printf "\nEnter number (1-${#names[@]}) or q to quit: "
+    read -s -n 1 -r choice
+    echo
+
+    if [[ "$choice" == "q" ]]; then
+        echo "Quit."
+        exit 0
+    fi
+
+    # Validate numeric
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo "Invalid input."
+        sleep 1
+        continue
+    fi
+
+    choice=$((choice-1))
+
+    # Range check
+    if (( choice < 0 || choice >= ${#dirs[@]} )); then
+        echo "Number out of range."
+        sleep 1
+        continue
+    fi
+
+    DIR="${dirs[$choice]}"
+    NAME="${names[$choice]}"
+
+    echo -e "Running: $NAME"
+    sleep 0.4
+
+    mupen64plus --set Core[SaveSRAMPath]="$DIR" "$ROM" >/dev/null 2>&1
+
+done

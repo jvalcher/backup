@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#
+# Generate ctags file "./tags" for C,C++ recursively starting in current directory
+#
+
+ctags -f tags \
+      --recurse=yes \
+      --sort=yes \
+      --languages=C,C++ \
+      --kinds-all=* \
+      .

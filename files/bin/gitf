@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#
+# git commit file(s) with message
+#
+# Usage:
+#
+#   gitf "Fixed display issue" src1.c src2.c" ...
+#
+
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage:  gitf \"Fixed display issue\" src1.c src2.c ..."
+    exit 1
+else
+    git add ${@:2}
+    git commit -m "$1"
+fi
+
