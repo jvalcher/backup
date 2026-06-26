@@ -371,9 +371,9 @@ EOF
 sudo sysctl --system
 
 #
-# Configuration files
+# Files
 #
-print_title "Update configuration files"
+print_title "Update files"
 
 rsync -av "$BACKUP_HOME_DIR"/ $HOME
 sync_dirs "$BACKUP_BIN_DIR" "$HOME_BIN_DIR"
