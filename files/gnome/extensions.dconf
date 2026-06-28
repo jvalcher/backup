@@ -70,7 +70,7 @@ message='Knock knock'
 show-test-notification=false
 
 [simple_timer]
-last-timer-input='20:00'
+last-timer-input='10:00'
 
 [tiling-assistant]
 active-window-hint-color='rgb(211,70,21)'

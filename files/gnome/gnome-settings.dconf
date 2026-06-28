@@ -121,9 +121,9 @@ window-state=(917, 774, false)
 backend='drive'
 delete-after=90
 exclude-list=['$TRASH', '$DOWNLOAD', '$HOME/**/__pycache__', '$HOME/.launchpadlib']
-last-backup='2026-06-26T13:30:11.395333Z'
+last-backup='2026-06-27T13:53:06.639519Z'
 last-restore='2025-10-30T02:52:38.044686Z'
-last-run='2026-06-26T13:12:23.600014Z'
+last-run='2026-06-27T13:31:35.175395Z'
 nag-check='2026-05-28T16:09:14.304484Z'
 periodic=true
 periodic-period=1
@@ -457,7 +457,7 @@ initial-size=(1355, 762)
 maximized=false
 
 [org/gnome/portal/filechooser/com.google.Chrome]
-last-folder-path='/home/jvalcher/Pictures/wallpapers_terminal'
+last-folder-path='/home/jvalcher/Downloads'
 
 [org/gnome/portal/filechooser/com.makemkv.MakeMKV]
 last-folder-path='/home/jvalcher/Videos/Movies, shows/Movies/An Ecology of Mind'
@@ -584,7 +584,7 @@ sleep-inactive-ac-type='nothing'
 disable-user-extensions=false
 disabled-extensions=['tiling-assistant@ubuntu.com', 'ubuntu-appindicators@ubuntu.com', 'ding@rastersoft.com', 'mediacontrols@cliffniff.github.com', 'ubuntu-dock@ubuntu.com', 'window-title-is-back@fthx']
 enabled-extensions=['ubuntu-dock@ubuntu.com', 'tilingshell@ferrarodomenico.com', 'paperwm@paperwm.github.com', 'timer@lbgracioso.net', 'simple-timer@majortomvr.github.com', 'bluetooth-quick-connect@bjarosze.gmail.com', 'hide-cursor@elcste.com', 'notification-position@drugo.dev', 'dash-to-panel@jderose9.github.com', 'window-state-manager@kishorv06.github.io', 'reminder_alarm_clock@trifonovkv.gmail.com', 'no-overview@fthx']
-favorite-apps=['org.gnome.Nautilus.desktop', 'org.gnome.Settings.desktop', 'blueman-manager.desktop', 'gnome-system-monitor_gnome-system-monitor.desktop', 'org.gnome.clocks.desktop', 'chrome-ifpboanaelncmlfhjbnnloipmogocahb-Default.desktop', 'nordvpn-gui.desktop', 'google-chrome.desktop', 'kitty.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'kitty.desktop', 'google-chrome.desktop', 'org.gnome.Settings.desktop', 'blueman-manager.desktop', 'gnome-system-monitor_gnome-system-monitor.desktop', 'org.gnome.clocks.desktop', 'chrome-ifpboanaelncmlfhjbnnloipmogocahb-Default.desktop', 'nordvpn-gui.desktop']
 last-selected-power-profile='performance'
 welcome-dialog-last-shown-version='46.0'
 
@@ -660,7 +660,7 @@ message='Knock knock'
 show-test-notification=false
 
 [org/gnome/shell/extensions/simple_timer]
-last-timer-input='20:00'
+last-timer-input='10:00'
 
 [org/gnome/shell/extensions/tiling-assistant]
 active-window-hint-color='rgb(211,70,21)'
@@ -692,10 +692,10 @@ toggle-message-tray=['<Super>v', '<Super>m']
 locations=@av []
 
 [org/gnome/software]
-check-timestamp=int64 1782479333
-flatpak-purge-timestamp=int64 1782432360
-install-timestamp=int64 1781464164
-update-notification-timestamp=int64 1781528024
+check-timestamp=int64 1782566874
+flatpak-purge-timestamp=int64 1782610056
+install-timestamp=int64 1782566857
+update-notification-timestamp=int64 1782652626
 
 [org/gnome/solitaire/window-state]
 fullscreen=false
