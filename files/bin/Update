@@ -1,31 +1,32 @@
 #!/bin/bash
 
 G="\033[0;32m"
+M="\033[35m"
 E="\033[0m"
 
 printf "\n----${G}apt${E}----\n"
-printf "\n    --update--\n\n"
+printf "\n    --${M}update${E}--\n\n"
 sudo apt update
-printf "\n    --upgrade--\n\n"
+printf "\n    --${M}upgrade${E}--\n\n"
 sudo apt upgrade -y
-printf "\n    --autoremove--\n\n"
+printf "\n    --${M}autoremove${E}--\n\n"
 sudo apt autoremove -y
 
 printf "\n"
 printf "\n---${G}snap${E}----\n"
-printf "\n    --refresh--\n\n"
+printf "\n    --${M}refresh${E}--\n\n"
 sudo snap refresh
 
 printf "\n"
 printf "\n---${G}brew${E}----\n"
-printf "\n    --update--\n\n"
+printf "\n    --${M}update${E}--\n\n"
 brew update
-printf "\n    --upgrade--\n\n"
+printf "\n    --${M}upgrade${E}--\n\n"
 brew upgrade -y
 
 printf "\n"
 printf "\n---${G}rust${E}----\n"
-printf "\n    --update--\n\n"
-rustup update -y
+printf "\n    --${M}update${E}--\n\n"
+rustup update
 
 printf "\n\n"
