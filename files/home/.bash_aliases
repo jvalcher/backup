@@ -186,3 +186,5 @@ alias openocd="/home/jvalcher/Repos/xpack-openocd-0.12.0-7/bin/openocd"
 # Workflowy To Do (installed in Chrome)
 alias wf_todo='/opt/google/chrome/google-chrome --profile-directory=Default --app-id=ifpboanaelncmlfhjbnnloipmogocahb'
 
+# Dev notes
+alias notes_dev="nvim $HOME/Documents/dev"
